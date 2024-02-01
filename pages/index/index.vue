@@ -3,7 +3,7 @@
 		:value="page"
 		@change="(name) => PageChangeClick(name)"
 		:fixed="true"
-		:placeholder="true"
+		:placeholder="false"
 		:safeAreaInsetBottom="true"
 	>
 		<u-tabbar-item name="home" text="首页" icon="home" @click="(name) => PageChangeClick(name)" ></u-tabbar-item>
@@ -43,9 +43,9 @@
 			<view class="row">
 			  <view class="card">
 				<text style="font-size: 4vh;color: white;margin-top: 2vh;margin-left: 2vw;">一键合影</text>
-				<text style="color: #e7e7e7;margin-top: 1vh;margin-left: 2vw;">快来“云游”四方</text>
+				<text style="color: #e7e7e7;margin-top: 1vh;margin-left: 2vw;">快来一起“云游”四方</text>
 				<view style="width:36vw;height:5vh;margin-top: 6vh;margin-left: 2vw;border: 1px solid yellow">
-					<u-button shape="circle" text="开始使用" @click="GPOS_start()"></u-button>
+					<u-button shape="circle" text="开始使用" @click="PageChangeClick('GPOS')"></u-button>
 				</view>
 			  </view>
 			  <view class="card">
@@ -57,7 +57,7 @@
 			</view>
 		</view>
 	</view>
-	<view v-else-if="page == 'mine'">
+	<view v-if="page == 'mine'">
 		<view class="user_info" >
 			<view class="avatar">
 				<u-avatar size="100" :src="avatar_url"></u-avatar>	
@@ -74,6 +74,9 @@
 			<u-cell name="graph" title="我的合影" isLink="true"  @click="(name) => PageChangeClick(name)"></u-cell>
 			<u-cell name="settings" title="设置" isLink="true" @click="(name) => PageChangeClick(name)"></u-cell>
 		</u-cell-group>
+	</view>\
+	<view v-if="page == 'GPOS'">
+		<u-navbar left-text='返回' right-text="选择图片"></u-navbar>
 	</view>
 </template>
 
@@ -87,7 +90,7 @@
 				avatar_url: default_avatar_url,
 				nickname: "默认用户",
 				nicknamepass: false,
-				page: "login",
+				page: "mine",
 				cellgroups_style: {
 					'position': 'relative',
 					'width': '100vw',
