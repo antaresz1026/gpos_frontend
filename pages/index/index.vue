@@ -9,74 +9,88 @@
 		<u-tabbar-item name="home" text="首页" icon="home" @click="(name) => PageChangeClick(name)" ></u-tabbar-item>
 		<u-tabbar-item name="mine" text="我的" icon="account" @click="(name) => PageChangeClick(name)" ></u-tabbar-item>
 	</u-tabbar>
+	
 	<view v-if="login == false && page == 'login'">
-		<view class="avatar_display">
-			<button class="avatar_wrapper" style="z-index: 1;opacity: 0;" open-type="chooseAvatar" @chooseavatar="ChooseAvatar"></button>
-			<image class="avatar_wrapper" :src="avatar_url"></image>	
-		</view>
-		<view class="nickname_input_box">
-			<label class="nickname_label" for="nickname">昵称</label>
-			<input 
-				class="nickname_input" 
-				id="nickname" 
-				type="nickname" 
-				placeholder="请输入昵称"
-				maxlength="16"
-				@confirm="NicknameConfirm"
-				@nicknamereview="NicknameCheck"
-			/>
-			<view style="position: absolute;margin-top: 10vh;width: 90vw; margin-left: 5vw;">
-				<button 
-					type="primary" 
-					:disabled="!login_access"
-					:hairline="true" 
-					open-type="agreePrivacyAuthorization" 
-					@click="UserLogin()" 
-				>
-				登录</button>
+		<view class="page">
+			<view class="avatar_display">
+				<button class="avatar_wrapper" style="z-index: 1;opacity: 0;" open-type="chooseAvatar" @chooseavatar="ChooseAvatar"></button>
+				<image class="avatar_wrapper" :src="avatar_url"></image>	
 			</view>
-		</view>
-
-	</view>
-	<view v-if="page == 'home'">
-		<view class="container">
-			<view class="row">
-			  <view class="card">
-				<text style="font-size: 4vh;color: white;margin-top: 2vh;margin-left: 2vw;">一键合影</text>
-				<text style="color: #e7e7e7;margin-top: 1vh;margin-left: 2vw;">快来一起“云游”四方</text>
-				<view style="width:36vw;height:5vh;margin-top: 6vh;margin-left: 2vw;border: 1px solid yellow">
-					<u-button shape="circle" text="开始使用" @click="PageChangeClick('GPOS')"></u-button>
+			<view class="nickname_input_box">
+				<label class="nickname_label" for="nickname">昵称</label>
+				<input 
+					class="nickname_input" 
+					id="nickname" 
+					type="nickname" 
+					placeholder="请输入昵称"
+					maxlength="16"
+					@confirm="NicknameConfirm"
+					@nicknamereview="NicknameCheck"
+				/>
+				<view style="position: absolute;margin-top: 10vh;width: 90vw; margin-left: 5vw;">
+					<button 
+						type="primary" 
+						:disabled="!login_access"
+						:hairline="true" 
+						open-type="agreePrivacyAuthorization" 
+						@click="UserLogin()" 
+					>
+					登录</button>
 				</view>
-			  </view>
-			  <view class="card">
-				  
-			  </view>
-			</view>
-			<view class="row">
-				
 			</view>
 		</view>
 	</view>
-	<view v-if="page == 'mine'">
-		<view class="user_info" >
-			<view class="avatar">
-				<u-avatar size="100" :src="avatar_url"></u-avatar>	
-			</view>
-			<view class="nickname_display">
-				<u--text color="#000000" :text="nickname" :size="30" :bold="true" :lines="1" ></u--text>
-				<button style="position: absolute;width: 30vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == false" @click="PageChangeClick('login')"></button>
-				<text style="position: absolute;margin-top: 2vh;margin-left: 10vw;font-size: 20px;border: 1px solid red;" v-if="login == false">登录</text>
-				<button style="position: absolute;width: 40vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == true"></button>
-				<text style="position: absolute;margin-top: 2vh;width: 30vw;margin-left: 6vw;font-size: 20px;border: 1px solid red;" v-if="login == true">编辑个人资料</text>
+	
+	<view v-if="page == 'home'">
+		<view class="page">
+			<view class="container">
+				<view class="row">
+				  <view class="card">
+					<text style="font-size: 4vh;color: white;margin-top: 2vh;margin-left: 2vw;">一键合影</text>
+					<text style="color: #e7e7e7;margin-top: 1vh;margin-left: 2vw;">快来一起“云游”四方</text>
+					<view style="width:36vw;height:5vh;margin-top: 6vh;margin-left: 2vw;border: 1px solid yellow">
+						<u-button shape="circle" text="开始使用" @click="PageChangeClick('GPOS')"></u-button>
+					</view>
+				  </view>
+				  <view class="card">
+					  
+				  </view>
+				</view>
+				<view class="row">
+					
+				</view>
 			</view>
 		</view>
-		<u-cell-group :customStyle="cellgroups_style">
-			<u-cell name="graph" title="我的合影" isLink="true"  @click="(name) => PageChangeClick(name)"></u-cell>
-			<u-cell name="settings" title="设置" isLink="true" @click="(name) => PageChangeClick(name)"></u-cell>
-		</u-cell-group>
+	</view>
+	
+	<view v-if="page == 'mine'">
+		<view class="page">
+			<view class="user_info" >
+				<view class="avatar">
+					<u-avatar size="100" :src="avatar_url"></u-avatar>	
+				</view>
+				<view class="nickname_display">
+					<u--text color="#000000" :text="nickname" :size="30" :bold="true" :lines="1" ></u--text>
+					<button style="position: absolute;width: 30vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == false" @click="PageChangeClick('login')"></button>
+					<text style="position: absolute;margin-top: 2vh;margin-left: 10vw;font-size: 20px;border: 1px solid red;" v-if="login == false">登录</text>
+					<button style="position: absolute;width: 40vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == true"></button>
+					<text style="position: absolute;margin-top: 2vh;width: 30vw;margin-left: 6vw;font-size: 20px;border: 1px solid red;" v-if="login == true">编辑个人资料</text>
+				</view>
+			</view>
+			<u-cell-group :customStyle="cellgroups_style">
+				<u-cell name="graph" title="我的合影" isLink="true"  @click="(name) => PageChangeClick(name)"></u-cell>
+				<u-cell name="settings" title="设置" isLink="true" @click="(name) => PageChangeClick(name)"></u-cell>
+			</u-cell-group>
+		</view>
 	</view>\
-	<view v-if="page == 'GPOS'">
-		<u-navbar left-text='返回' right-text="选择图片"></u-navbar>
+	
+	<view v-if="page == 'GPOS' && gpos_steps == 0">
+		<u-navbar :safeAreaInsetTop='false' left-text='返回' right-text="选择图片" title="选择背景" @leftclick="GPOS_Steps('back')" @rightClick="ChooseImage()"></u-navbar>
+		<view class="page">
+			<view class = "image_preview">
+				<u--image :src="image_bgr" shape="squre" width="60vw" height="25vh" radius="10"></u--image>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -96,7 +110,12 @@
 					'width': '100vw',
 					'margin-top': '10vh',
 					'background-color': '#ffffff'
-				}
+				},
+				gpos_steps: 0,
+				image_src: "",
+				image_bgr: default_avatar_url,
+				bg_chosen: "",
+				image_com: ""
 			} 
 		},
 		methods: {
@@ -158,12 +177,44 @@
 					}
 				})
 			},
+			GPOS_Steps(action) {
+				if(action == 'back') {
+					this.gpos_steps--;
+				} else if(action == 'forward') {
+					this.gpos_steps++;
+				}
+				if(this.gpos_steps == -1) {
+					this.gpos_steps = 0;
+					this.PageChangeClick('home');
+				}
+			},
+			ChooseImage() {
+				wx.chooseMedia({
+					success: (res) => {
+						this.image_bgr = res.tempFilePath;
+					}, 
+					fail (error) {
+						wx.showToast({
+							title: '选择图片失败！',
+							icon: 'error'
+						})
+					}
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 	@import '@/uni_modules/uview-ui/theme.scss';
+	
+	.page {
+		position: fixed;
+		width: 100vw;
+		height: 84vh;
+		top: 5vh;
+		border: 2px solid red;
+	}
 	
 	//Page "mine"
 	.user_info {
@@ -230,6 +281,7 @@
 		border: 0.1px solid grey;
 	}
 
+	//Page "home"
 	.container {
 		width: 100vw;
 		height: 81vh;
@@ -249,6 +301,20 @@
 		flex-direction: column;
 		background-color: $u-primary;
 		border-radius: 10px; 
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	
+	//Page 'GPOS'
+	.image_preview {
+		position: relative;
+		width: 60vw;
+		height: 25vh; 
+		align-items: center;
+		margin-top: 10vh;
+		margin-left: 20vw;
+		background-color: #ffffee;
+		border-radius: 10px; 
+		padding: 3px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
 </style>
