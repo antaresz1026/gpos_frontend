@@ -76,7 +76,7 @@
 		</u-cell-group>
 	</view>\
 	<view v-if="page == 'GPOS'">
-		<u-navbar left-text='返回' right-text="选择图片"></u-navbar>
+		<uni-nav-bar left-text='返回' right-text="选择图片" title="上传人像" fixed="true" left-icon="arrow-left" @clickLeft="StepBack()" @clickRight="ChooseMedia()"></uni-nav-bar>
 	</view>
 </template>
 
@@ -90,13 +90,17 @@
 				avatar_url: default_avatar_url,
 				nickname: "默认用户",
 				nicknamepass: false,
-				page: "mine",
+				page: "GPOS",
 				cellgroups_style: {
 					'position': 'relative',
 					'width': '100vw',
 					'margin-top': '10vh',
 					'background-color': '#ffffff'
-				}
+				},
+				image_src: "",
+				image_bgr: "",
+				image_com: "",
+				image_bg: "",
 			} 
 		},
 		methods: {
@@ -158,6 +162,24 @@
 					}
 				})
 			},
+			StepBack() {
+				this.steps--;
+				if(this.steps == -1) {
+					this.steps = 0;
+					PageChangeClick('home');
+				}
+			},
+			ChooseMedia() {
+				wx.chooseMedia({
+					success: (res) => {
+						this.image_src = res.tempFiles.tempFilePath;
+						console.log('src chosen');
+					},
+					fail (error): {
+						console.log('image choose error');
+					}
+				})
+			}
 		}
 	}
 </script>
