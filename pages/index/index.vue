@@ -83,8 +83,6 @@
 			</u-cell-group>
 		</view>
 	</view>\
-<<<<<<< HEAD
-	
 	<view v-if="page == 'GPOS' && gpos_steps == 0">
 		<u-navbar :safeAreaInsetTop='false' left-text='返回' right-text="选择图片" title="选择背景" @leftclick="GPOS_Steps('back')" @rightClick="ChooseImage()"></u-navbar>
 		<view class="page">
@@ -92,10 +90,6 @@
 				<u--image :src="image_bgr" shape="squre" width="60vw" height="25vh" radius="10"></u--image>
 			</view>
 		</view>
-=======
-	<view v-if="page == 'GPOS'">
-		<uni-nav-bar left-text='返回' right-text="选择图片" title="上传人像" fixed="true" left-icon="arrow-left" @clickLeft="StepBack()" @clickRight="ChooseMedia()"></uni-nav-bar>
->>>>>>> 3c1de878fc39145e7ec445f6a9e99e2b038148f1
 	</view>
 </template>
 
@@ -116,18 +110,11 @@
 					'margin-top': '10vh',
 					'background-color': '#ffffff'
 				},
-<<<<<<< HEAD
 				gpos_steps: 0,
 				image_src: "",
 				image_bgr: default_avatar_url,
 				bg_chosen: "",
 				image_com: ""
-=======
-				image_src: "",
-				image_bgr: "",
-				image_com: "",
-				image_bg: "",
->>>>>>> 3c1de878fc39145e7ec445f6a9e99e2b038148f1
 			} 
 		},
 		methods: {
@@ -189,7 +176,6 @@
 					}
 				})
 			},
-<<<<<<< HEAD
 			GPOS_Steps(action) {
 				if(action == 'back') {
 					this.gpos_steps--;
@@ -211,23 +197,6 @@
 							title: '选择图片失败！',
 							icon: 'error'
 						})
-=======
-			StepBack() {
-				this.steps--;
-				if(this.steps == -1) {
-					this.steps = 0;
-					PageChangeClick('home');
-				}
-			},
-			ChooseMedia() {
-				wx.chooseMedia({
-					success: (res) => {
-						this.image_src = res.tempFiles.tempFilePath;
-						console.log('src chosen');
-					},
-					fail (error): {
-						console.log('image choose error');
->>>>>>> 3c1de878fc39145e7ec445f6a9e99e2b038148f1
 					}
 				})
 			}
