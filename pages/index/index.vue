@@ -48,7 +48,7 @@
 				  <view class="card">
 					<text style="font-size: 4vh;color: white;margin-top: 2vh;margin-left: 2vw;">一键合影</text>
 					<text style="color: #e7e7e7;margin-top: 1vh;margin-left: 2vw;">快来一起“云游”四方</text>
-					<view style="width:36vw;height:5vh;margin-top: 6vh;margin-left: 2vw;border: 1px solid yellow">
+					<view style="width:36vw;height:5vh;margin-top: 6vh;margin-left: 2vw;">
 						<u-button shape="circle" text="开始使用" @click="PageChangeClick('GPOS')"></u-button>
 					</view>
 				  </view>
@@ -71,10 +71,10 @@
 				</view>
 				<view class="nickname_display">
 					<u--text color="#000000" :text="nickname" :size="30" :bold="true" :lines="1" ></u--text>
-					<button style="position: absolute;width: 30vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == false" @click="PageChangeClick('login')"></button>
-					<text style="position: absolute;margin-top: 2vh;margin-left: 10vw;font-size: 20px;border: 1px solid red;" v-if="login == false">登录</text>
-					<button style="position: absolute;width: 40vw;height: 4vh;margin-top: 2vh;border-radius: 10px;border: 1px solid red;" v-if="login == true"></button>
-					<text style="position: absolute;margin-top: 2vh;width: 30vw;margin-left: 6vw;font-size: 20px;border: 1px solid red;" v-if="login == true">编辑个人资料</text>
+					<button style="position: absolute;width: 30vw;height: 4vh;margin-top: 2vh;border-radius: 10px;" v-if="login == false" @click="PageChangeClick('login')"></button>
+					<text style="position: absolute;margin-top: 2vh;margin-left: 10vw;font-size: 20px;" v-if="login == false">登录</text>
+					<button style="position: absolute;width: 40vw;height: 4vh;margin-top: 2vh;border-radius: 10px;" v-if="login == true"></button>
+					<text style="position: absolute;margin-top: 2vh;width: 30vw;margin-left: 6vw;font-size: 20px;" v-if="login == true">编辑个人资料</text>
 				</view>
 			</view>
 			<u-cell-group :customStyle="cellgroups_style">
@@ -83,11 +83,29 @@
 			</u-cell-group>
 		</view>
 	</view>\
-	<view v-if="page == 'GPOS' && gpos_steps == 0">
-		<u-navbar :safeAreaInsetTop='false' left-text='返回' right-text="选择图片" title="选择背景" @leftclick="GPOS_Steps('back')" @rightClick="ChooseImage()"></u-navbar>
-		<view class="page">
-			<view class = "image_preview">
-				<u--image :src="image_bgr" shape="squre" width="60vw" height="25vh" radius="10"></u--image>
+	<view v-if="page == 'GPOS'">
+		<u-navbar v-if="gpos_steps==0" :safeAreaInsetTop='false' left-text='返回' right-text="选择图片" title="选择背景图" @leftclick="GPOS_Steps('back')" @rightClick="ChooseImage('0')"></u-navbar>
+		<u-navbar v-if="gpos_steps==1" :safeAreaInsetTop='false' left-text='返回' right-text="选择图片" title="选择人像图" @leftclick="GPOS_Steps('back')" @rightClick="ChooseImage('1')"></u-navbar>
+		<u-navbar v-if="gpos_steps==2" :safeAreaInsetTop='false' left-text='返回' right-text="下一步" title="图像分割" @leftclick="GPOS_Steps('back')" @rightClick="GPOS_Steps('forward')"></u-navbar>
+		<view v-if="gpos_steps==0" class="page">
+			<view class="image_container">
+				<u--image :src="image_bgr" mode="aspectFit" shape="squre" width="80vw" height="60vh" radius="10"></u--image>
+			</view>
+			<view class="next_step">
+				<button type="primary" hairline="true" @click="GPOS_Steps('forward')">下一步</button>
+			</view>
+		</view>
+		<view v-if="gpos_steps==1" class="page">
+			<view class="image_container">
+				<u--image :src="image_src" mode="aspectFit" shape="squre" width="80vw" height="60vh" radius="10"></u--image>
+			</view>
+			<view class="next_step">
+				<button type="primary" hairline="true" @click="GPOS_Matting()">下一步</button>
+			</view>
+		</view>
+		<view v-if="gpos_steps==2" class="page">
+			<view class="image_container">
+				<u--image :src="image_com" mode="aspectFit" shape="squre" width="80vw" height="60vh" radius="10"></u--image>
 			</view>
 		</view>
 	</view>
@@ -112,7 +130,7 @@
 				},
 				gpos_steps: 0,
 				image_src: "",
-				image_bgr: default_avatar_url,
+				image_bgr: "",
 				bg_chosen: "",
 				image_com: ""
 			} 
@@ -187,14 +205,50 @@
 					this.PageChangeClick('home');
 				}
 			},
-			ChooseImage() {
+			ChooseImage(step) {
 				wx.chooseMedia({
 					success: (res) => {
-						this.image_bgr = res.tempFilePath;
+						if(step == '0') {
+							this.image_bgr = res.tempFiles[0].tempFilePath;
+						} else if(step == '1') {
+							this.image_src = res.tempFiles[0].tempFilePath;
+						}
 					}, 
 					fail (error) {
 						wx.showToast({
 							title: '选择图片失败！',
+							icon: 'error'
+						})
+					}
+				})
+			},
+			GPOS_Matting() {
+				wx.uploadFile({
+					url: 'https://antaresz.cc:21026/GPOS/upload',
+					filePath: this.image_bgr,
+					name: 'bgr',
+					success: (res) => {
+						wx.uploadFile({
+							url: 'https://antaresz.cc:21026/GPOS/upload',
+							filePath: this.image_src,
+							name: 'src',
+							success: (res) => {
+								wx.showToast({
+									title: '图片上传成功',
+									icon: 'success'
+								});
+							},
+							fail: (res) => {
+								wx.showToast({
+									title: '人像上传失败',
+									icon: 'error'
+								});
+							}
+						})
+					},
+					fail (error) {
+						wx.showToast({
+							title: '背景上传失败',
 							icon: 'error'
 						})
 					}
@@ -212,7 +266,6 @@
 		width: 100vw;
 		height: 84vh;
 		top: 5vh;
-		border: 2px solid red;
 	}
 	
 	//Page "mine"
@@ -223,7 +276,6 @@
 		width: 100vw;
 		height: 130px;
 		display: flex;
-		border: 2px solid red;
 	}
 	.avatar {
 		width: 100px;
@@ -231,7 +283,6 @@
 		margin-top: 15px;
 		margin-left: 3vw;
 		border-radius: 50%;
-		border: 2px solid blue;
 	}
 	.nickname_display {
 		position: relative;
@@ -284,14 +335,12 @@
 	.container {
 		width: 100vw;
 		height: 81vh;
-		border: 2px solid red;
 	}
 	.row {
 		width: 100vw;
 		height: 27vh;
 		display: flex;
 		justify-content: space-around;
-		border: 2px solid blue;
 	}
 	.card {
 		width: 41vw; 
@@ -304,16 +353,22 @@
 	}
 	
 	//Page 'GPOS'
-	.image_preview {
+	.image_container {
 		position: relative;
-		width: 60vw;
-		height: 25vh; 
+		width: 80vw;
+		height: 60vh; 
 		align-items: center;
-		margin-top: 10vh;
-		margin-left: 20vw;
+		margin-top: 5vh;
+		margin-left: 10vw;
 		background-color: #ffffee;
 		border-radius: 10px; 
 		padding: 3px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	.next_step {
+		position: relative;
+		width: 80vw;
+		margin-top: 5vh;
+		margin-left: 10vw;
 	}
 </style>
