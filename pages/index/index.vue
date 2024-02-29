@@ -177,7 +177,6 @@
 								success: (res) => {
 									this.PageChangeClick("mine");
 									this.sessionID = res.data.sessionID;
-									console.log(this.sessionID);
 								},
 								fail (error) {
 									wx.showToast({
@@ -226,12 +225,20 @@
 				wx.uploadFile({
 					url: 'https://antaresz.cc:21026/GPOS/upload',
 					filePath: this.image_bgr,
-					name: 'bgr',
+					name: 'upload_image',
+					formData: {
+						type: 'bgr',
+						sessionID: this.sessionID,
+					},
 					success: (res) => {
 						wx.uploadFile({
 							url: 'https://antaresz.cc:21026/GPOS/upload',
 							filePath: this.image_src,
-							name: 'src',
+							name: 'upload_image',
+							formData: {
+								type: 'src',
+								sessionID: this.sessionID,
+							},
 							success: (res) => {
 								wx.showToast({
 									title: '图片上传成功',
