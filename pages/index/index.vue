@@ -121,7 +121,7 @@
 				</view>
 			</u-overlay>
 			<view class="image_container">
-				<u--image :src="default_avatar_url" mode="aspectFit" shape="squre" width="80vw" height="60vh" radius="10"></u--image>
+				<u--image :src="image_com" mode="aspectFit" shape="squre" width="80vw" height="60vh" radius="10"></u--image>
 			</view>
 		</view>
 	</view>
@@ -289,7 +289,24 @@
 			GPOS_Matting() {
 				wx.request({
 					url: 'https://antaresz.cc:21026/GPOS/matting',
-					
+					data: {
+						sessionID: this.sessionID,
+					},
+					method: 'GET',
+					success: (res) => {
+						this.image_com = res.data.url;
+						this.matting_ready = false;
+						wx.showToast({
+							title: '图片抠图成功',
+							icon: 'success'
+						})
+					},
+					fail (error) {
+						wx.showToast({
+							title: '图片抠图失败',
+							icon: 'error'
+						})
+					}
 				})
 			}
 		}
